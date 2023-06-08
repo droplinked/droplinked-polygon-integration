@@ -12,7 +12,9 @@
     "vite": "^4.3.9"
   },
   "dependencies": {
-    "@moralisweb3/common-evm-utils": "^2.22.0",
-    "moralis": "^2.22.0"
+    "@moralisweb3/common-evm-utils": "^2.22.1",
+    "buffer": "^6.0.3",
+    "moralis": "^2.22.1",
+    "web3": "^4.0.1"
   }
 }

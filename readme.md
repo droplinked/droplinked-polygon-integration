@@ -10,6 +10,7 @@ The toolkit for integrating Binance into droplinked, including login, gating, re
 ```bash
 npm install moralis @moralisweb3/common-evm-utils
 npm i @metamask/sdk
+npm i web3
 ```
 
 Also, add 
