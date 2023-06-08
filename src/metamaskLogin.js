@@ -43,7 +43,14 @@ export async function PolygonLogin(){
         await requestAccounts();
     }
     let address = (await getAccounts())[0];
-    const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+    let chainId = await window.ethereum.request({ method: 'eth_chainId' });
+    if (Number(chainId) != 137 && Number(chainId) != 80001){
+        await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: '0x13881' }], // change to testnet
+        });
+        chainId = await window.ethereum.request({ method: 'eth_chainId' });
+    }
     const siweMessage = `Please sign this message to let droplinked view your PublicKey & Address and validate your identity`;
     let msg = `0x${Buffer.from(siweMessage, 'utf8').toString('hex')}`;
     const signature = await window.ethereum.request({ method: 'personal_sign', params: [msg,address]});
