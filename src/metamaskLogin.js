@@ -1,9 +1,4 @@
-// This File Includes the Functionality to be used with Metamask Including
-//      .MetaMask Login
-//      .Is MetaMask Installed?
-
 import { Buffer } from "buffer";
-
 /**
  * 
  * @returns {boolean} true if Metamask is installed on the browser otherwise false
@@ -31,11 +26,16 @@ async function requestAccounts(){
     }
 }
 
+/**
+ * 
+ * @param {string} address 
+ * @returns {number}
+ */
 export async function getBalance(address){
     return Number(await window.ethereum.request({ method: 'eth_getBalance', params: [address, 'latest'] }));
 }
 
-export async function MetaMaskLogin(){
+export async function PolygonLogin(){
     if(!isMetamaskInstalled()){
         return null;
     }
@@ -44,20 +44,13 @@ export async function MetaMaskLogin(){
     }
     let address = (await getAccounts())[0];
     const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-
-    //await window.ethereum.request({ method: 'wallet_requestPermissions', params: [{eth_accounts:{}}] });
-    
-    const siweMessage = `${window.location.host} wants you to sign in with your Ethereum account:\n${address}\n\nI accept the MetaMask Terms of Service: https://community.metamask.io/tos\n\nURI: https://${window.location.host}\nVersion: 1\nChain ID: 1\nNonce: 32891757\nIssued At: 2021-09-30T16:25:24.000Z`;
+    const siweMessage = `Please sign this message to let droplinked view your PublicKey & Address and validate your identity`;
     let msg = `0x${Buffer.from(siweMessage, 'utf8').toString('hex')}`;
-    console.log(msg);
     const signature = await window.ethereum.request({ method: 'personal_sign', params: [msg,address]});
     const publicKey = await window.ethereum.request({method : 'eth_getEncryptionPublicKey', params : [address]});
-    
     return {
         address : address,
-        isPolygon : Number(chainId) == 137 || Number(chainId) == 80001,
-        isMainNet : Number(chainId) == 137,
-        isTestnet : Number(chainId) == 80001,
+        network : Number(chainId) == 137 ? 'MainNet' : 'TestNet',
         publicKey : publicKey,
         signature : signature
     };
