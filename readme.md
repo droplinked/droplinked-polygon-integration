@@ -11,6 +11,7 @@ The toolkit for integrating Binance into droplinked, including login, gating, re
 npm install moralis @moralisweb3/common-evm-utils
 npm i @metamask/sdk
 npm i web3
+npm i eth-sig-util
 ```
 
 Also, add 
@@ -24,7 +25,7 @@ Also, add
 
 into the `</head>` part of your html (I'll fix this issue more properly later)
 
-### 1. Login using Metamask
+### 1.1 Login using Metamask (Front-end)
 
 You can use the PolygonLogin function like like below 
 
@@ -40,11 +41,19 @@ The result would be like :
 {
     "address": "0x89281f2da10fb35c1cf90954e1b3036c3eb3cc78",
     "network": "TestNet",
-    "publicKey": "b3zA9yF4oytcra7E7tLjmGbQ9i9JQ3M6uvrR/+QM5mk=",
     "signature": "0x9ba56709ce42f8a022e6dd0fe81639e3a31da0017f922eb3ec355dcf579bb8380a85641d6b771473d26902c64b42411308dfab0837c121a3c29cdda705a4c2111c"
 }
 ```
 
+### 1.2 Signature Verifiaction (Back-end)
+
+Use the `verifyEVMSignature` function from the `src/verifySignature.js` to verify a signature like this :
+
+```js
+console.log(verifyEVMSignature("0x89281f2da10fb35c1cf90954e1b3036c3eb3cc78" , "0x9ba56709ce42f8a022e6dd0fe81639e3a31da0017f922eb3ec355dcf579bb8380a85641d6b771473d26902c64b42411308dfab0837c121a3c29cdda705a4c2111c"));
+```
+
+It would return a `true` or `false` value based on the signature check.
 
 ### 2. Polygon Gating
 
@@ -109,3 +118,4 @@ Max discount percentage :  10
 NFTs passed :  ["0xEa072EB2c7FBC875DcB1B58F240fAF8755399f7e"]
 You can pass the gate
 ```
+
