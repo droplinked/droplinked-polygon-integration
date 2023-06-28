@@ -12,11 +12,17 @@
     "vite": "^4.3.9"
   },
   "dependencies": {
+    "@maticnetwork/maticjs": "^3.6.0",
     "@moralisweb3/common-evm-utils": "^2.22.1",
+    "axios": "^1.4.0",
     "buffer": "^6.0.3",
     "eth-sig-util": "^3.0.1",
     "ethereumjs-util": "^7.1.5",
+    "ethers": "^6.6.2",
+    "events": "^3.3.0",
+    "http-server": "^14.1.1",
     "moralis": "^2.22.1",
+    "nft.storage": "^7.1.0",
     "web3": "^4.0.1"
   }
 }

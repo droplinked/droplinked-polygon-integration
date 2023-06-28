@@ -10,20 +10,11 @@ The toolkit for integrating Binance into droplinked, including login, gating, re
 ```bash
 npm install moralis @moralisweb3/common-evm-utils
 npm i @metamask/sdk
-npm i web3
 npm i eth-sig-util
+npm install nft.storage
+npm install events
+npm install buffer --save
 ```
-
-Also, add 
-```html
-<script>
-      if (global === undefined) {
-        var global = window;
-      }
-    </script>
-```
-
-into the `</head>` part of your html (I'll fix this issue more properly later)
 
 ### 1.1 Login using Metamask (Front-end)
 
@@ -55,7 +46,7 @@ console.log(verifyEVMSignature("0x89281f2da10fb35c1cf90954e1b3036c3eb3cc78" , "0
 
 It would return a `true` or `false` value based on the signature check.
 
-### 2. Polygon Gating
+### 2. Polygon Gating (Backe-end and Front-end)
 
 You can use the gating logic like this : 
 
@@ -119,3 +110,191 @@ NFTs passed :  ["0xEa072EB2c7FBC875DcB1B58F240fAF8755399f7e"]
 You can pass the gate
 ```
 
+### 3. Polygon Record Product (Front-end)
+
+Simple usage : 
+
+```js
+// Get Account information from login
+let account_information = await PolygonLogin();
+
+let product_title = "test product";
+let discription = "test product description";
+let image_url = "https://i.imgur.com/removed.png";
+let price = 200; // It is actually 2 dollars (the price should be multiplied by 100)
+let amount = 2000;
+let comission = 1234; // It is actually 12.34% (the comission should be multiplied by 100)
+let tx_hash = await record_merch({
+    "type" : "t-shirt",
+    "size" : "large",
+    "color" : "red"
+} , account_information.address, product_title , discription, image_url, price, amount, comission);
+console.log(tx_hash);
+```
+
+throws "Transaction Rejected" error if the user rejects the transaction on Metamask.
+
+
+Will return a `tx_hash` like this : 
+
+```
+0x70e363b3a62caa2c1699adcfb682179d8c8ed3a412edcc8809b69aded15cc6de
+```
+
+### 3. Polygon Publish Request (Front-end)
+
+Should be used by the publisher who wants to publish a product.
+
+Simple usage : 
+
+```js
+let account_information = await PolygonLogin();
+let producer_address = "0x89281F2dA10fB35c1Cf90954E1B3036C3EB3cc78";
+let token_id = 1;
+publish_request(account_information.address, producer_address, token_id);
+```
+
+throws "Transaction Rejected" error if the user rejects the transaction on Metamask.
+
+Will return a `tx_hash` like this : 
+
+```
+0x70e363b3a62caa2c1699adcfb682179d8c8ed3a412edcc8809b69aded15cc6de
+```
+
+### 4. Polygon Approve Request (Front-end)
+
+Should be used by the owner of the product.
+
+Simple usage : 
+
+```js
+let account_information = await PolygonLogin();
+let request_id = 1;
+approve_request(account_information.address, request_id);
+```
+
+throws "Transaction Rejected" error if the user rejects the transaction on Metamask.
+
+
+Will return a `tx_hash` like this : 
+
+```
+0x70e363b3a62caa2c1699adcfb682179d8c8ed3a412edcc8809b69aded15cc6de
+```
+
+### 5. Polygon Cancel Request (Front-end)
+
+Should be used by the publisher who requested the product.
+
+Simple usage : 
+
+```js
+let account_information = await PolygonLogin();
+let request_id = 1;
+cancel_request(account_information.address, 2);
+```
+
+throws "Transaction Rejected" error if the user rejects the transaction on Metamask.
+
+
+Will return a `tx_hash` like this : 
+
+```
+0x70e363b3a62caa2c1699adcfb682179d8c8ed3a412edcc8809b69aded15cc6de
+```
+
+### 6. Polygon Disapprove Request (Front-end)
+
+Should be used by the owner of the product.
+
+Simple usage : 
+
+```js
+let account_information = await PolygonLogin();
+let request_id = 1;
+disapprove(account_information.address, request_id);
+```
+
+throws "Transaction Rejected" error if the user rejects the transaction on Metamask.
+
+
+Will return a `tx_hash` like this : 
+
+```
+0x70e363b3a62caa2c1699adcfb682179d8c8ed3a412edcc8809b69aded15cc6de
+```
+
+
+### 7. Polygon Web3 Events & Transaction verification (Web3)
+
+Use the `polygonWeb3.js` file on the web3 project, and use the `getTransactionEvents` function which will return the events of a transaction.
+
+If the transaction is not verified, it will throw an error.
+If the transaction is verified, it will return the events of the transaction.
+
+Simple usage : 
+
+```js
+console.log(await getTransactionEvents("0xd3a49c903b131080c66b1166993928dc575061b078f0a3d1397627929e5551f0"));
+```
+
+Will return a transaction events object like this : 
+
+```
+{
+    event : "approve_request_event",
+    data : [{
+        name : "request_id",
+        value : 1n
+    }]
+}
+```
+
+List of all events and their result can be found below (Ignore the values in the result, they are just examples) : 
+
+mint_event : 
+
+    - Event name : `mint_event`
+
+    - Data : 
+
+        - `token_id` : `1n`
+
+        - `recipient` : `0x89281F2dA10fB35c1Cf90954E1B3036C3EB3cc78`
+
+        - `amount` : `2000n`
+
+publish_request_event : 
+
+    - Event name : `publish_request_event`
+
+    - Data : 
+
+        - `request_id` : `1n`
+
+        - `token_id` : `1n`
+
+approve_request_event : 
+
+    - Event name : `approve_request_event`
+
+    - Data : 
+
+        - `request_id` : `1n`
+
+cancel_request_event :
+    
+        - Event name : `cancel_request_event`
+    
+        - Data : 
+    
+            - `request_id` : `1n`
+
+disapprove_request_event :
+
+    - Event name : `disapprove_request_event`
+
+    - Data : 
+
+        - `request_id` : `1n`
