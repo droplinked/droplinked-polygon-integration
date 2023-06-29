@@ -4,7 +4,7 @@ import {abi, contractAddress, provider} from './polygonConstants'
  * 
  * @param {string} address of the 
  * @param {number} request_id 
- * @returns {string} transaction hash
+ * @returns {Promise<string>} transaction hash
  */
 export let approve_request = async function(address,request_id){
     const signer = await provider.getSigner();
