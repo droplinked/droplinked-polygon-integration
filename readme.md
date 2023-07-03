@@ -1,5 +1,5 @@
 # droplinked-Polygon-integration
-The toolkit for integrating Binance into droplinked, including login, gating, record, affiliate, and payment
+The toolkit for integrating Polygon into droplinked, including login, gating, record, affiliate, and payment
 
 ---
 
@@ -10,6 +10,7 @@ The toolkit for integrating Binance into droplinked, including login, gating, re
 ```bash
 npm install moralis @moralisweb3/common-evm-utils
 npm i @metamask/sdk
+npm i ethers
 npm i eth-sig-util
 npm install nft.storage
 npm install events
